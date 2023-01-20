@@ -1,4 +1,4 @@
-# Akhil
+# AkhilBot
 
 ## Personal Usage
 
