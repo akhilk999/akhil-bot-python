@@ -14,13 +14,33 @@ intents.presences = False
 intents.reactions = True
 
 #client = discord.Client(intents=intents)
-client = commands.Bot(command_prefix='&', activity = discord.Game(name="&help"), intents=intents)
+client = commands.Bot(command_prefix='&', help_command=commands.MinimalHelpCommand(), activity = discord.Game(name="&help"), intents=intents)
 
-client.remove_command('help')
+#overrides page formatting for MinimalHelpCommand -> puts each page in an embed
+class MyNewHelp(commands.MinimalHelpCommand):
+  async def send_pages(self):
+    destination = self.get_destination()
+    for page in self.paginator.pages:
+      emby = discord.Embed(description=page)
+      await destination.send(embed=emby)
+client.help_command = MyNewHelp()
+
+class MyHelp(commands.HelpCommand):
+  async def send_bot_help(self, mapping):
+    embed = discord.Embed(title="Help")
+    for cog, commands in mapping.items():
+      command_signatures = [self.get_command_signature(c) for c in commands]
+      if command_signatures:
+        cog_name = getattr(cog, "qualified_name", "No Category")
+        embed.add_field(name=cog_name, value)
+    channel = self.get_destination()
+    await channel.send(embed=embed)
+
+
 
 async def embed():
   embed=discord.Embed(title="Sample Embed",  url="https://realdrewdata.medium.com/", description="This is an embed that will show how to build an embed and     the different components", color=0xFF5733)
-  await channel.send(embed=embed)
+  await embed
 
 @client.event
 async def on_ready():
@@ -69,18 +89,17 @@ async def on_message(message):
     await message.channel.send('real')
 
   if message.content.startswith('embed'):
-    await message.channel.send(embed)
+    await message.channel.send(embed=embed())
 
   # process commands
   await client.process_commands(message)
 
+#client.remove_command('help')
     
 #commands
-@client.command()
-async def help(ctx):
-  #if arg == 0:
-    #await ctx.send('Hi! I am AkhilBot. These are a list of commands I can use: ')
-  await ctx.send('Hi! I am AkhilBot. These are a list of commands I can use: ')
+#@client.command()
+#async def help(ctx):
+ # await ctx.send('Hi! I am AkhilBot. These are a list of commands I can use: ')
   
 keep_alive()
 client.run(token)
