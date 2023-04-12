@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from discord.utils import find
+from replit import db
 from keep_alive import keep_alive
 
 token = os.environ['TOKEN']
@@ -32,7 +33,7 @@ class MyHelp(commands.HelpCommand):
       command_signatures = [self.get_command_signature(c) for c in commands]
       if command_signatures:
         cog_name = getattr(cog, "qualified_name", "No Category")
-        embed.add_field(name=cog_name, value)
+        #embed.add_field(name=cog_name, value)
     channel = self.get_destination()
     await channel.send(embed=embed)
 
@@ -100,6 +101,9 @@ async def on_message(message):
 #@client.command()
 #async def help(ctx):
  # await ctx.send('Hi! I am AkhilBot. These are a list of commands I can use: ')
-  
+@client.command()
+async def test(ctx):
+  await ctx.send('test')
+
 keep_alive()
 client.run(token)
