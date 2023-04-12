@@ -14,6 +14,9 @@ intents.typing = False
 intents.presences = False
 intents.reactions = True
 
+snipe_message = None
+snipe_author = None
+
 #client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix='&', help_command=commands.MinimalHelpCommand(), activity = discord.Game(name="&help"), intents=intents)
 
@@ -36,12 +39,6 @@ class MyHelp(commands.HelpCommand):
         #embed.add_field(name=cog_name, value)
     channel = self.get_destination()
     await channel.send(embed=embed)
-
-
-
-async def embed():
-  embed=discord.Embed(title="Sample Embed",  url="https://realdrewdata.medium.com/", description="This is an embed that will show how to build an embed and     the different components", color=0xFF5733)
-  await embed
 
 @client.event
 async def on_ready():
@@ -72,7 +69,11 @@ async def on_member_remove(member):
 #message is deleted
 @client.event
 async def on_message_delete(message):
-  await message.channel.send(f"Message: \"{message.content}\" was deleted\nMessage by: {message.author}")
+  global snipe_message, snipe_author
+  
+  snipe_message = message.content
+  snipe_author = message.author
+
 
 #when a message is sent
 @client.event
@@ -80,17 +81,11 @@ async def on_message(message):
   if message.author == client.user:
     return 
 
-  if message.content.startswith('i am racist'):
-    await message.channel.send('yooo me too')
-
   if message.content.startswith('hi'):
     await message.channel.send('fr i agree '+message.content)
 
   if message.content.startswith('real'):
     await message.channel.send('real')
-
-  if message.content.startswith('embed'):
-    await message.channel.send(embed=embed())
 
   # process commands
   await client.process_commands(message)
@@ -98,12 +93,25 @@ async def on_message(message):
 #client.remove_command('help')
     
 #commands
-#@client.command()
-#async def help(ctx):
- # await ctx.send('Hi! I am AkhilBot. These are a list of commands I can use: ')
+
 @client.command()
-async def test(ctx):
-  await ctx.send('test')
+async def profile(ctx, member: discord.Member = None):
+  if not member:
+    member = ctx.author
+  userAvatar = member.avatar
+  embed = discord.Embed()
+  embed.set_image(url=userAvatar)
+  await ctx.send(embed=embed)
+
+@client.command()
+async def snipe(ctx):
+  if snipe_message == None:
+    embed = discord.Embed(description = "No snipe available")
+  else:
+    pfp = snipe_author.avatar
+    embed = discord.Embed(description = f"{snipe_message}")
+    embed.set_author(name = f"{snipe_author}", icon_url = pfp)
+  await ctx.send(embed=embed)
 
 keep_alive()
 client.run(token)
