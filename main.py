@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.utils import find
 from replit import db
 from keep_alive import keep_alive
+import re
 
 token = os.environ['TOKEN']
 
@@ -14,6 +15,7 @@ intents.typing = False
 intents.presences = False
 intents.reactions = True
 
+hi_re = r"(?i)( |^)hi( |$)"
 snipe_message = None
 snipe_author = None
 
@@ -81,7 +83,8 @@ async def on_message(message):
   if message.author == client.user:
     return 
 
-  if message.content.startswith('hi'):
+  #if message.content.startswith('hi'):
+  if re.search(hi_re, message.content):  
     await message.channel.send('fr i agree '+message.content)
 
   if message.content.startswith('real'):
