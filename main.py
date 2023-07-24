@@ -19,6 +19,8 @@ hi_re = r"(?i)( |^)hi( |$)"
 snipe_message = None
 snipe_author = None
 
+count = 0;
+
 #client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix='&', help_command=commands.MinimalHelpCommand(), activity = discord.Game(name="&help"), intents=intents)
 
@@ -80,10 +82,18 @@ async def on_message_delete(message):
 #when a message is sent
 @client.event
 async def on_message(message):   
+  global count
+  count+=1
+  #returns nothing if message is from bot
   if message.author == client.user:
     return 
 
-  #if message.content.startswith('hi'):
+  #random message every 10 messages
+  if count==1000:
+    await message.channel.send('I know what you did.')
+    count=0
+  
+  #message contains hi -> fr i agree + message
   if re.search(hi_re, message.content):  
     await message.channel.send('fr i agree '+message.content)
 
