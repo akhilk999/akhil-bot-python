@@ -109,6 +109,14 @@ python-versions = "*"
 "discord.py" = ">=2.1.0"
 
 [[package]]
+name = "discord-pretty-help"
+version = "2.0.7"
+description = "And nicer looking interactive help menu for discord.py"
+category = "main"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[[package]]
 name = "discord.py"
 version = "2.1.0"
 description = "A Python wrapper for the Discord API"
@@ -506,7 +514,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "flake8 
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.9"
-content-hash = "e14e3a6c1c3413c9d83df0549a2b3c36345e287eb7803b8c7de57c971797b9dc"
+content-hash = "862f31a42d470a0523cfa5513b3ba75af2b119745f90e1b69233cc0a8a7e4b9a"
 
 [metadata.files]
 aiohttp = []
@@ -519,6 +527,7 @@ click = []
 colorama = []
 debugpy = []
 discord = []
+discord-pretty-help = []
 "discord.py" = []
 flask = []
 frozenlist = []
