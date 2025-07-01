@@ -2,11 +2,12 @@ import os
 import discord
 from discord.ext import commands
 from discord.utils import find
-from replit import db
-from keep_alive import keep_alive
+# from keep_alive import keep_alive
+from dotenv import load_dotenv
 import re
 
-token = os.environ['TOKEN']
+load_dotenv()
+token=os.getenv("TOKEN")
 
 intents = discord.Intents.all()
 intents.members = True
@@ -177,5 +178,5 @@ async def snipe(ctx):
   await ctx.send(embed=embed)
 
 
-keep_alive()
+# keep_alive()
 client.run(token)
