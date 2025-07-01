@@ -86,6 +86,7 @@ class MyHelp(commands.HelpCommand):
 @client.event
 async def on_ready():
   print('We have logged in as {0.user}'.format(client))
+  await client.tree.sync()
 
 
 #bot joins server
@@ -157,7 +158,7 @@ async def on_message(message):
 #commands
 
 
-@client.command()
+@client.hybrid_command()
 async def profile(ctx, member: discord.Member = None):
   if not member:
     member = ctx.author
@@ -167,7 +168,7 @@ async def profile(ctx, member: discord.Member = None):
   await ctx.send(embed=embed)
 
 
-@client.command()
+@client.hybrid_command()
 async def snipe(ctx):
   if snipe_message == None:
     embed = discord.Embed(description="No snipe available")
